@@ -1,0 +1,3 @@
+https://kotlinlang.org/docs/jvm-spring-boot-restful.html#explore-the-spring-boot-application
+https://github.com/seanjin97/intellicount-back/blob/master/entrypoint/src/main/java/com/intellicount/Boot.java
+https://github.com/emmapatterson/multi-module-spring-boot
