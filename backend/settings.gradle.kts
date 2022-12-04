@@ -1,2 +1,2 @@
 rootProject.name = "demo"
-include("entrypoint")
+include("entrypoint", "controller", "models")

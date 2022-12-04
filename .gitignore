@@ -39,4 +39,6 @@ out/
 ### Mac ###
 .DS_Store
 
+### Application specific ###
+data/
 
