@@ -5,11 +5,12 @@ import com.example.demo.model.UrlMapping
 import org.apache.commons.lang3.RandomStringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import java.net.URL
 
 @Service
-class RedexService(val urlMappingDao: UrlMappingDao) {
+class RedexService(@Qualifier("sqlDataSource") val urlMappingDao: UrlMappingDao) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass.simpleName)
 
