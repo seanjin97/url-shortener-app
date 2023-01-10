@@ -2,23 +2,14 @@ package com.example.demo.dao
 
 import com.example.demo.model.UrlMapping
 import com.example.demo.repositories.UrlMappingRepository
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.verify
+import io.mockk.*
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class SQLRedexAccessControlServiceTest {
-
-    val logger: Logger = LoggerFactory.getLogger(javaClass.simpleName)
+private class SQLRedexAccessControlServiceTest {
 
     private val urlMappingRepository: UrlMappingRepository = mockk()
 
@@ -36,10 +27,21 @@ internal class SQLRedexAccessControlServiceTest {
         ZoneOffset.UTC
     )
 
-    private val testData = mutableListOf(
+    private val testData = listOf(
         UrlMapping(shortUrl="123abc", longUrl="https://www.google.com"),
         UrlMapping(shortUrl = "987poi", longUrl = "https://www.yahoo.com")
     )
+
+    @BeforeEach
+    fun setUp() {
+        mockkStatic(OffsetDateTime::class)
+        every { OffsetDateTime.now(ZoneOffset.UTC) } returns mockDate
+    }
+
+    @AfterEach
+    fun tearDown() {
+        clearAllMocks()
+    }
 
     @Test
     fun `should return url mapping object if shortUrl found`() {
@@ -65,8 +67,6 @@ internal class SQLRedexAccessControlServiceTest {
 
     @Test
     fun `should successfully save url mapping`() {
-        mockkStatic(OffsetDateTime::class)
-        every { OffsetDateTime.now(ZoneOffset.UTC) } returns mockDate
         every { urlMappingRepository.save(UrlMapping(shortUrl = "987poi", longUrl = "https://www.yahoo.com", createdDate = mockDate)) } returns testData[1]
         every { urlMappingRepository.findByIdOrNull("987poi") } returns testData[1]
 
@@ -77,6 +77,18 @@ internal class SQLRedexAccessControlServiceTest {
         verify(exactly = 1) { urlMappingRepository.findByIdOrNull("987poi")}
         assertNotNull(newlyCreatedMapping)
         assertEquals("https://www.yahoo.com", newlyCreatedMapping?.longUrl)
+    }
+
+    @Test
+    fun `should return url mapping if long url found`() {
+        every { urlMappingRepository.findTopByLongUrl("https://www.google.com") } returns testData[0]
+
+        val foundMapping = sqlRedexAccessControlService.getShortUrlByLongUrl("https://www.google.com")
+
+        verify(exactly = 1) { urlMappingRepository.findTopByLongUrl("https://www.google.com") }
+        assertNotNull(foundMapping)
+        assertEquals(testData[0].shortUrl, foundMapping?.shortUrl)
+
     }
 
 }

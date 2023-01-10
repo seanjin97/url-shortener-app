@@ -2,6 +2,7 @@ package com.example.demo.services
 
 import com.example.demo.dao.UrlMappingDao
 import com.example.demo.model.UrlMapping
+import com.example.demo.utils.formatLongUrl
 import org.apache.commons.lang3.RandomStringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service
 import java.net.URL
 
 @Service
-class RedexService(@Qualifier("sqlDataSource") val urlMappingDao: UrlMappingDao) {
+class RedirectService(@Qualifier("sqlDataSource") val urlMappingDao: UrlMappingDao) {
 
     val logger: Logger = LoggerFactory.getLogger(javaClass.simpleName)
 
@@ -19,7 +20,7 @@ class RedexService(@Qualifier("sqlDataSource") val urlMappingDao: UrlMappingDao)
     }
 
     fun saveUrlMapping(redirectUrl: String): UrlMapping {
-        val formattedLongUrl = com.example.demo.utils.formatLongUrl(redirectUrl)
+        val formattedLongUrl = formatLongUrl(redirectUrl)
 
         val validatedUrl = URL(formattedLongUrl).toURI()
 
@@ -47,7 +48,7 @@ class RedexService(@Qualifier("sqlDataSource") val urlMappingDao: UrlMappingDao)
     }
 
     fun getShortUrlByLongUrl(longUrl: String): UrlMapping? {
-        val formattedLongUrl = com.example.demo.utils.formatLongUrl(longUrl)
+        val formattedLongUrl = formatLongUrl(longUrl)
         return urlMappingDao.getShortUrlByLongUrl(formattedLongUrl)
     }
 
