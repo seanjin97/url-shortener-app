@@ -41,6 +41,7 @@ out/
 
 ### Application specific ###
 data/
+testdata/
 
 .yarn/*
 !.yarn/cache

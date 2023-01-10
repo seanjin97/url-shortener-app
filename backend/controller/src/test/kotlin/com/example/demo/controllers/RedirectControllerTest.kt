@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
@@ -41,7 +42,7 @@ private class RedirectControllerTest(@Autowired val mockMvc: MockMvc) {
 
         mockMvc.get("/1234abcd")
             .andExpect {
-                status { is3xxRedirection() }
+                status { HttpStatus.MOVED_PERMANENTLY }
                 header { string("location", "https://www.google.com") }
             }
         verify(exactly = 1) { mockRedirectService.getRedirectUrl("1234abcd") }
