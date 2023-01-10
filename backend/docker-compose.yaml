@@ -16,9 +16,14 @@ services:
     build: .
     restart: always
     environment:
-      - DATASOURCE_URL=jdbc:postgresql://db:5432/redex
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=password
+      - PORT=8080
+      - PGHOST=db
+      - PGPORT=5432
+      - PGUSER=postgres
+      - PGPASSWORD=password
+#      - DATASOURCE_URL=jdbc:postgresql://db:5432/redex
+#      - DB_USERNAME=postgres
+#      - DB_PASSWORD=password
     depends_on:
       - db
     ports:
