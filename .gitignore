@@ -51,3 +51,15 @@ testdata/
 !.yarn/sdks
 !.yarn/versions
 
+### Terragrunt ###
+terragrunt.iml
+vendor
+.terraform
+*.tfstate
+*.tfstate.backup
+*.out
+.terragrunt-cache
+.bundle
+.terraform.lock.hcl
+terragrunt
+
